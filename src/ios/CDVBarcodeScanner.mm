@@ -68,6 +68,7 @@
 @property (nonatomic)         BOOL                        is1D;
 @property (nonatomic)         BOOL                        is2D;
 @property (nonatomic)         BOOL                        capturing;
+@property (nonatomic)         BOOL                        waiting;
 @property (nonatomic)         BOOL                        isFrontCamera;
 @property (nonatomic)         BOOL                        isFlipped;
 
@@ -79,6 +80,7 @@
 - (void)barcodeScanCancelled;
 - (void)openDialog;
 - (NSString*)setUpCaptureSession;
+- (void)stopWaiting;
 - (void)captureOutput:(AVCaptureOutput*)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection*)connection;
 - (NSString*)formatStringFrom:(zxing::BarcodeFormat)format;
 - (UIImage*)getImageFromSample:(CMSampleBufferRef)sampleBuffer;
@@ -450,10 +452,18 @@ parentViewController:(UIViewController*)parentViewController
     AVCaptureVideoDataOutput* output = [[AVCaptureVideoDataOutput alloc] init];
     if (!output) return @"unable to obtain video capture output";
     
-    NSDictionary* videoOutputSettings = [NSDictionary
-                                         dictionaryWithObject:[NSNumber numberWithInt:kCVPixelFormatType_32BGRA]
-                                         forKey:(id)kCVPixelBufferPixelFormatTypeKey
-                                         ];
+//    NSDictionary* videoOutputSettings = [NSDictionary
+//                                         dictionaryWithObject:[NSNumber numberWithInt:kCVPixelFormatType_32BGRA]
+//                                         forKey:(id)kCVPixelBufferPixelFormatTypeKey
+//                                         ];
+    
+    NSDictionary* videoOutputSettings = [NSDictionary dictionaryWithObjectsAndKeys:
+        [NSNumber numberWithInt:kCVPixelFormatType_32BGRA], (id)kCVPixelBufferPixelFormatTypeKey,
+        [NSNumber numberWithFloat:0.1], (id) AVVideoQualityKey,
+        [NSNumber numberWithInt:300], (id) AVVideoWidthKey,
+        [NSNumber numberWithInt:200], (id) AVVideoHeightKey,
+         nil];
+    
     
     output.alwaysDiscardsLateVideoFrames = YES;
     output.videoSettings = videoOutputSettings;
@@ -489,10 +499,26 @@ parentViewController:(UIViewController*)parentViewController
     return nil;
 }
 
+
+- (void)stopWaiting {
+//    NSLog(@"Stopping waiting to process frame");
+    self.waiting = false;
+}
+
 //--------------------------------------------------------------------------
 // this method gets sent the captured frames
 //--------------------------------------------------------------------------
 - (void)captureOutput:(AVCaptureOutput*)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection*)connection {
+    
+    //Throttle the frequency of processing
+    if(self.waiting) return;
+    
+    
+//    NSLog(@"Processing frame");
+    self.waiting = true;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self performSelector:@selector(stopWaiting) withObject:nil afterDelay:0.25];
+    });
     
     if (!self.capturing) return;
     
@@ -529,15 +555,15 @@ parentViewController:(UIViewController*)parentViewController
     
     try {
         DecodeHints decodeHints;
-        decodeHints.addFormat(BarcodeFormat_QR_CODE);
-        decodeHints.addFormat(BarcodeFormat_DATA_MATRIX);
-        decodeHints.addFormat(BarcodeFormat_UPC_E);
-        decodeHints.addFormat(BarcodeFormat_UPC_A);
-        decodeHints.addFormat(BarcodeFormat_EAN_8);
-        decodeHints.addFormat(BarcodeFormat_EAN_13);
-        decodeHints.addFormat(BarcodeFormat_CODE_128);
+//        decodeHints.addFormat(BarcodeFormat_QR_CODE);
+//        decodeHints.addFormat(BarcodeFormat_DATA_MATRIX);
+//        decodeHints.addFormat(BarcodeFormat_UPC_E);
+//        decodeHints.addFormat(BarcodeFormat_UPC_A);
+//        decodeHints.addFormat(BarcodeFormat_EAN_8);
+//        decodeHints.addFormat(BarcodeFormat_EAN_13);
+//        decodeHints.addFormat(BarcodeFormat_CODE_128);
         decodeHints.addFormat(BarcodeFormat_CODE_39);
-        decodeHints.addFormat(BarcodeFormat_ITF);
+//        decodeHints.addFormat(BarcodeFormat_ITF);
         
         // here's the meat of the decode process
         Ref<LuminanceSource>   luminanceSource   ([self getLuminanceSourceFromSample: sampleBuffer imageBytes:&imageBytes]);
