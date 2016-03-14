@@ -959,73 +959,73 @@ parentViewController:(UIViewController*)parentViewController
     overlayView.autoresizingMask    = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     overlayView.opaque              = NO;
 
-    UIToolbar* toolbar = [[UIToolbar alloc] init];
-    toolbar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
-    
-    id cancelButton = [[UIBarButtonItem alloc]
-                       initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
-                       target:(id)self
-                       action:@selector(cancelButtonPressed:)
-                       ];
-    
-    
-    id flexSpace = [[UIBarButtonItem alloc]
-                    initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
-                    target:nil
-                    action:nil
-                    ];
-    
-    id flipCamera = [[UIBarButtonItem alloc]
-                       initWithBarButtonSystemItem:UIBarButtonSystemItemCamera
-                       target:(id)self
-                       action:@selector(flipCameraButtonPressed:)
-                       ];
-    
-#if USE_SHUTTER
-    id shutterButton = [[UIBarButtonItem alloc]
-                        initWithBarButtonSystemItem:UIBarButtonSystemItemCamera
-                        target:(id)self
-                        action:@selector(shutterButtonPressed)
-                        ];
-    
-    toolbar.items = [NSArray arrayWithObjects:flexSpace,cancelButton,flexSpace, flipCamera ,shutterButton,nil];
-#else
-    toolbar.items = [NSArray arrayWithObjects:flexSpace,cancelButton,flexSpace, flipCamera,nil];
-#endif
-    bounds = overlayView.bounds;
-    
-    [toolbar sizeToFit];
-    CGFloat toolbarHeight  = [toolbar frame].size.height;
-    CGFloat rootViewHeight = CGRectGetHeight(bounds);
-    CGFloat rootViewWidth  = CGRectGetWidth(bounds);
-    CGRect  rectArea       = CGRectMake(0, rootViewHeight - toolbarHeight, rootViewWidth, toolbarHeight);
-    [toolbar setFrame:rectArea];
-    
-    [overlayView addSubview: toolbar];
-    
-    UIImage* reticleImage = [self buildReticleImage];
-    UIView* reticleView = [[UIImageView alloc] initWithImage: reticleImage];
-    CGFloat minAxis = MIN(rootViewHeight, rootViewWidth);
-    
-    rectArea = CGRectMake(
-                          0.5 * (rootViewWidth  - minAxis),
-                          0.5 * (rootViewHeight - minAxis),
-                          minAxis,
-                          minAxis
-                          );
-    
-    [reticleView setFrame:rectArea];
-    
-    reticleView.opaque           = NO;
-    reticleView.contentMode      = UIViewContentModeScaleAspectFit;
-    reticleView.autoresizingMask = 0
-    | UIViewAutoresizingFlexibleLeftMargin
-    | UIViewAutoresizingFlexibleRightMargin
-    | UIViewAutoresizingFlexibleTopMargin
-    | UIViewAutoresizingFlexibleBottomMargin
-    ;
-    
-    [overlayView addSubview: reticleView];
+//     UIToolbar* toolbar = [[UIToolbar alloc] init];
+//     toolbar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
+//     
+//     id cancelButton = [[UIBarButtonItem alloc]
+//                        initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
+//                        target:(id)self
+//                        action:@selector(cancelButtonPressed:)
+//                        ];
+//     
+//     
+//     id flexSpace = [[UIBarButtonItem alloc]
+//                     initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+//                     target:nil
+//                     action:nil
+//                     ];
+//     
+//     id flipCamera = [[UIBarButtonItem alloc]
+//                        initWithBarButtonSystemItem:UIBarButtonSystemItemCamera
+//                        target:(id)self
+//                        action:@selector(flipCameraButtonPressed:)
+//                        ];
+//     
+// #if USE_SHUTTER
+//     id shutterButton = [[UIBarButtonItem alloc]
+//                         initWithBarButtonSystemItem:UIBarButtonSystemItemCamera
+//                         target:(id)self
+//                         action:@selector(shutterButtonPressed)
+//                         ];
+//     
+//     toolbar.items = [NSArray arrayWithObjects:flexSpace,cancelButton,flexSpace, flipCamera ,shutterButton,nil];
+// #else
+//     toolbar.items = [NSArray arrayWithObjects:flexSpace,cancelButton,flexSpace, flipCamera,nil];
+// #endif
+//     bounds = overlayView.bounds;
+//     
+//     [toolbar sizeToFit];
+//     CGFloat toolbarHeight  = [toolbar frame].size.height;
+//     CGFloat rootViewHeight = CGRectGetHeight(bounds);
+//     CGFloat rootViewWidth  = CGRectGetWidth(bounds);
+//     CGRect  rectArea       = CGRectMake(0, rootViewHeight - toolbarHeight, rootViewWidth, toolbarHeight);
+//     [toolbar setFrame:rectArea];
+//     
+//     [overlayView addSubview: toolbar];
+//     
+//     UIImage* reticleImage = [self buildReticleImage];
+//     UIView* reticleView = [[UIImageView alloc] initWithImage: reticleImage];
+//     CGFloat minAxis = MIN(rootViewHeight, rootViewWidth);
+//     
+//     rectArea = CGRectMake(
+//                           0.5 * (rootViewWidth  - minAxis),
+//                           0.5 * (rootViewHeight - minAxis),
+//                           minAxis,
+//                           minAxis
+//                           );
+//     
+//     [reticleView setFrame:rectArea];
+//     
+//     reticleView.opaque           = NO;
+//     reticleView.contentMode      = UIViewContentModeScaleAspectFit;
+//     reticleView.autoresizingMask = 0
+//     | UIViewAutoresizingFlexibleLeftMargin
+//     | UIViewAutoresizingFlexibleRightMargin
+//     | UIViewAutoresizingFlexibleTopMargin
+//     | UIViewAutoresizingFlexibleBottomMargin
+//     ;
+//     
+//     [overlayView addSubview: reticleView];
     
     return overlayView;
 }
