@@ -28,7 +28,7 @@
             </feature>
         </config-file>
         <config-file target="*-Info.plist" parent="NSCameraUsageDescription">
-          <string>to scan card's barcode</string>
+          <string>Used to scan barcodes from University Cards</string>
         </config-file>
 
 
