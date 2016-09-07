@@ -145,6 +145,9 @@
     NSString*       callback;
     NSString*       capabilityError;
     
+    self.webView.opaque = NO;
+    self.webView.backgroundColor = [UIColor clearColor];
+    
     callback = command.callbackId;
     
     // We allow the user to define an alternate xib file for loading the overlay.
@@ -452,17 +455,17 @@ parentViewController:(UIViewController*)parentViewController
     AVCaptureVideoDataOutput* output = [[AVCaptureVideoDataOutput alloc] init];
     if (!output) return @"unable to obtain video capture output";
     
-//    NSDictionary* videoOutputSettings = [NSDictionary
-//                                         dictionaryWithObject:[NSNumber numberWithInt:kCVPixelFormatType_32BGRA]
-//                                         forKey:(id)kCVPixelBufferPixelFormatTypeKey
-//                                         ];
+    NSDictionary* videoOutputSettings = [NSDictionary
+                                         dictionaryWithObject:[NSNumber numberWithInt:kCVPixelFormatType_32BGRA]
+                                         forKey:(id)kCVPixelBufferPixelFormatTypeKey
+                                         ];
     
-    NSDictionary* videoOutputSettings = [NSDictionary dictionaryWithObjectsAndKeys:
-        [NSNumber numberWithInt:kCVPixelFormatType_32BGRA], (id)kCVPixelBufferPixelFormatTypeKey,
-        [NSNumber numberWithFloat:0.1], (id) AVVideoQualityKey,
-        [NSNumber numberWithInt:300], (id) AVVideoWidthKey,
-        [NSNumber numberWithInt:200], (id) AVVideoHeightKey,
-         nil];
+//    NSDictionary* videoOutputSettings = [NSDictionary dictionaryWithObjectsAndKeys:
+//        [NSNumber numberWithInt:kCVPixelFormatType_32BGRA], (id)kCVPixelBufferPixelFormatTypeKey,
+//        [NSNumber numberWithFloat:0.1], (id) AVVideoQualityKey,
+//        [NSNumber numberWithInt:300], (id) AVVideoWidthKey,
+//        [NSNumber numberWithInt:200], (id) AVVideoHeightKey,
+//         nil];
     
     
     output.alwaysDiscardsLateVideoFrames = YES;
