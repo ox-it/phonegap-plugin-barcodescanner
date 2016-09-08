@@ -368,7 +368,7 @@ parentViewController:(UIViewController*)parentViewController
     [self.captureSession stopRunning];
     //[self.parentViewController dismissViewControllerAnimated:YES completion:callbackBlock];
     [self.viewController.view removeFromSuperview];
-    
+    callbackBlock();
     // viewcontroller holding onto a reference to us, release them so they
     // will release us
     self.viewController = nil;
@@ -378,7 +378,7 @@ parentViewController:(UIViewController*)parentViewController
 - (BOOL)checkResult:(NSString *)result {
     [self.results addObject:result];
 
-    NSInteger treshold = 7;
+    NSInteger treshold = 3;
 
     if (self.results.count > treshold) {
         [self.results removeObjectAtIndex:0];
